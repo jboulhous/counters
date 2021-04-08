@@ -8,6 +8,11 @@ import AddCounter from './AddCounter.js';
 const Content = () => {
 	const [counterId, setCounterId] = useState(0);
 	const counters = useLiveQuery(() => db.counters.where("id").above(0).toArray());
+
+	if ( !counterId && counters && counters.length) {
+		console.log('Content')
+		setCounterId(counters[0].id)
+	}
 	
 	return (
 		<div className="row">

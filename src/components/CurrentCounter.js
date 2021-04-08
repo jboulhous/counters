@@ -69,7 +69,10 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 
 	const deleteCounter = () => {
 		if ( window.confirm('Confirm deleting the current counter') ) {
-			db.counters.delete(counter.id);
+			db.counters.delete(counter.id).then(x => {
+				setCounterId(0)
+				setCounter(null)
+			})
 		}
 	}
 
