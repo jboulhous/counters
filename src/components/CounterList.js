@@ -1,30 +1,12 @@
 import React, {useState} from 'react';
 import {useLiveQuery} from 'dexie-react-hooks';
 import db from '../db';
+import AddCounter from './AddCounter.js'
 
 const CounterList = ({currentCounter, setCurrentCounter}) => {
 	const counters = useLiveQuery(() => db.counters.where("id").above(0).toArray());
 	const counterCount = useLiveQuery(() => db.counters.count());
-	const [title, setTitle] = useState("");
-	// const [isActive, setIsActive] = useState(false);
-	const addCounter = title => {
-		console.log('addCounter')
-		const counter = {
-			title,
-			total: 0,
-			step: 1
-		}
-
-		db.counters
-			.add(counter)
-			.then((id) => {
-				console.log('setting current counter id', id);
-				setCurrentCounter(id)
-			});
-		setTitle("");
-		// setIsActive(false);
-	}
-
+	
 	return (
 		<div className="col-md-4 order-md-2 mb-4">
 			<h4 className="d-flex justify-content-between align-items-center mb-3">
@@ -52,27 +34,7 @@ const CounterList = ({currentCounter, setCurrentCounter}) => {
 					</li>)
 				})}
 			</ul>
-			<form className="" onSubmit={ev => {
-				ev.preventDefault();
-				console.log('form submit');
-				title && addCounter(title);
-			}}>
-				<div className="mb-3">
-					<div className="input-group">
-						<input 
-							type="text" 
-							className="form-control" 
-							placeholder="Count something..." 
-							required="" 
-							value={title}
-							onChange={ev => setTitle(ev.target.value)} 
-						/>
-						<div className="input-group-append">
-							<button className="btn btn-outline-secondary" type="submit">Add counter</button>
-						</div>
-					</div>
-				</div>	
-			</form>
+			<AddCounter setCurrentCounter={setCurrentCounter} />
 		</div>
 	)
 }
