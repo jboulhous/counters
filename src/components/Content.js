@@ -1,13 +1,20 @@
 import {useState} from 'react';
+import {useLiveQuery} from 'dexie-react-hooks';
 import CurrentCounter from './CurrentCounter.js';
 import CounterList from './CounterList.js';
+import db from '../db';
+import AddCounter from './AddCounter.js';
 
 const Content = () => {
 	const [counterId, setCounterId] = useState(0);
+	const counters = useLiveQuery(() => db.counters.where("id").above(0).toArray());
+	
 	return (
 		<div className="row">
-			<CounterList currentCounter={counterId} setCurrentCounter={setCounterId}/>
-			<CurrentCounter counterId={counterId} setCounterId={setCounterId}/>
+			{counters && counters.length ? <>
+				<CounterList counters={counters} currentCounter={counterId} setCurrentCounter={setCounterId}/>
+				<CurrentCounter counterId={counterId} setCounterId={setCounterId}/>
+			</> : <AddCounter setCurrentCounter={setCounterId}/>}
 		</div>
 	)
 	

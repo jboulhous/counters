@@ -1,18 +1,14 @@
 import React, {useState} from 'react';
-import {useLiveQuery} from 'dexie-react-hooks';
 import db from '../db';
 import AddCounter from './AddCounter.js'
 
-const CounterList = ({currentCounter, setCurrentCounter}) => {
-	const counters = useLiveQuery(() => db.counters.where("id").above(0).toArray());
-	const counterCount = useLiveQuery(() => db.counters.count());
-	
+const CounterList = ({counters, currentCounter, setCurrentCounter}) => {
 	return (
 		<div className="col-md-4 order-md-2 mb-4">
 			<h4 className="d-flex justify-content-between align-items-center mb-3">
 				<span className="text-muted">Counters</span>
 				<span className="badge badge-secondary badge-pill">
-					{counterCount}
+					{counters && counters.length}
 				</span>
 			</h4>
 			<ul className="list-group mb-3">
