@@ -3,15 +3,12 @@ import { useLiveQuery } from "dexie-react-hooks";
 import db from "../db";
 
 const CurrentCounter = ({counterId, setCounterId}) => {
-	// const [counterId, setCounterId] = useState(0);
 	window.setCounterId = setCounterId;
 	const [counter, setCounter] = useState(null);
 	window.counter = counter;
 	window.setCounter = setCounter;
 	const counters = useLiveQuery(
 		() => db.counters.where('id').equals(counterId).toArray().then(res => {
-			console.log('counters', counters);
-			console.log('current counters rest', res); 
 			if (res.length) setCounterId(res[0].id);
 			if (res.length) setCounter(res[0]);
 			return res;
@@ -75,8 +72,6 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 			})
 		}
 	}
-
-	console.log('before returning CurrentCounter', counter);
 
 	return (
 		<div className="col-md-8">

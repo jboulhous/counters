@@ -4,7 +4,6 @@ import db from '../db';
 const AddCounter = ({setCurrentCounter}) => {
 	const [title, setTitle] = useState("");
 	const addCounter = title => {
-		console.log('addCounter')
 		const counter = {
 			title,
 			total: 0,
@@ -20,7 +19,6 @@ const AddCounter = ({setCurrentCounter}) => {
 	return (
 		<form className="" onSubmit={ev => {
 			ev.preventDefault();
-			console.log('form submit');
 			title && addCounter(title);
 		}}>
 			<div className="mb-3">

@@ -10,7 +10,6 @@ const Content = () => {
 	const counters = useLiveQuery(() => db.counters.where("id").above(0).toArray());
 
 	if ( !counterId && counters && counters.length) {
-		console.log('Content')
 		setCounterId(counters[0].id)
 	}
 	
