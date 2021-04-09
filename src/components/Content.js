@@ -14,6 +14,11 @@ const Content = () => {
 		setCounterId(counters[0].id)
 	}
 	
+	if ( counterId && counters && counters.length){
+		const exists = counters.find(x => x.id === counterId)
+		if (!exists) setCounterId(counters[0].id)
+	}
+	
 	return (
 		<div className="row">
 			{counters && counters.length ? <>
