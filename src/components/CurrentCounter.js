@@ -3,21 +3,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import db from "../db";
 
 const CurrentCounter = ({counterId, setCounterId}) => {
-	window.setCounterId = setCounterId;
-	const [counter, setCounter] = useState(null);
-	window.counter = counter;
-	window.setCounter = setCounter;
-	const counters = useLiveQuery(
-		() => db.counters.where('id').equals(counterId).toArray().then(res => {
-			if (res.length) setCounterId(res[0].id);
-			if (res.length) setCounter(res[0]);
-			return res;
-		}),
-		[counterId]
-	)
+	const counter = useLiveQuery(() => db.counters.get(counterId), [counterId])
 
-	if (!counters) return null;
-	if (!counters.length) return null;
+	if (!counter) return null;
 
 	const incrementStep = () =>  {
 		const value = {
@@ -25,7 +13,9 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 			step: counter.step + 1,
 		}
 		console.log('increment step', counter.step, value);
-		setCounter(value);
+		db.counters.update(counter.id, {step: counter.step + 1}).then((res) => {
+			console.log('step incremented');
+		});
 	}
 
 	const decrementStep = () =>  {
@@ -34,7 +24,9 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 			step: counter.step - 1,
 		}
 		console.log('decrement step', counter.step, value);
-		setCounter(value);
+		db.counters.update(counter.id, {step: counter.step - 1}).then((res) => {
+			console.log('step decremented');
+		});
 	}
 
 	const incrementCounter = () => {
@@ -68,7 +60,6 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 		if ( window.confirm('Confirm deleting the current counter') ) {
 			db.counters.delete(counter.id).then(x => {
 				setCounterId(0)
-				setCounter(null)
 			})
 		}
 	}
