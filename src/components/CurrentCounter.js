@@ -18,6 +18,24 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 		});
 	}
 
+	const onStepChange = (ev) => {
+		const value = {
+			...counter,
+			step: ev.target.value
+		}
+		console.log('decrement step', counter.step, value);
+		db.counters.update(counter.id, {step: Number(ev.target.value)}).then((res) => {
+			console.log('step decremented');
+		});
+	}
+
+	const onStepKeyPress = (ev) => {
+		const keyCode = ev.keyCode || ev.which;
+		const keyValue = String.fromCharCode(keyCode);
+		if (!/\d/.test(keyValue))
+			ev.preventDefault();
+	}
+
 	const decrementStep = () =>  {
 		const value = {
 			...counter,
@@ -86,7 +104,8 @@ const CurrentCounter = ({counterId, setCounterId}) => {
 									aria-describedby="validatedInputGroupPrepend" 
 									required="" 
 									value={(counter && isFinite(counter.step) ? counter.step : "1")} 
-									readOnly={true}
+									onChange={onStepChange}
+									onKeyPress={onStepKeyPress}
 								/>
 
 								<div className="input-group-append">
